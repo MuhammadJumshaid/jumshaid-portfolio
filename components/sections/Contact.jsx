@@ -47,7 +47,7 @@ export default function Contact() {
               .map(({ label, value, href, Icon, external, copy }, index) => (
                 // Wrapper li staggers in; the inner card keeps its own hover lift.
                 <li key={label} className="reveal-item" style={{ "--i": index }}>
-                  <div className="card card-interactive flex items-center gap-2 p-2 pr-3">
+                  <div className="card card-interactive spotlight flex items-center gap-2 p-2 pr-3">
                     <a
                       href={href}
                       {...(external && { target: "_blank", rel: "noopener noreferrer" })}
@@ -72,7 +72,7 @@ export default function Contact() {
         </div>
 
         <div className="reveal-item lg:col-span-7" style={{ "--i": 2 }}>
-          <div className="card relative overflow-hidden p-6 sm:p-8">
+          <div className="card spotlight overflow-hidden p-6 sm:p-8">
             {/* Thin accent line along the top edge marks the final call to action */}
             <span
               aria-hidden="true"

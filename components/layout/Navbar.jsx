@@ -51,6 +51,9 @@ export default function Navbar() {
         <MobileMenu links={navLinks} />
       </Container>
 
+      {/* Reading progress: scaled by --progress, set in NavScrollSpy */}
+      <span aria-hidden="true" className="scroll-progress pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-accent/40 via-accent to-accent/40" />
+
       <NavScrollSpy headerId={HEADER_ID} />
     </header>
   );

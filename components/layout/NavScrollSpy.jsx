@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 // Renders nothing. Keeps the server-rendered navbar in sync with the page:
 // - sets data-scrolled on the header once the page is scrolled a little
+// - sets --progress (0 to 1) for the reading progress line
 // - sets aria-current="location" on the nav link of the section in view
 export default function NavScrollSpy({ headerId }) {
   useEffect(() => {
@@ -28,6 +29,8 @@ export default function NavScrollSpy({ headerId }) {
     // observer's line, so treat it as active there.
     const update = () => {
       header?.setAttribute("data-scrolled", String(window.scrollY > 8));
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      header?.style.setProperty("--progress", scrollable > 0 ? String(window.scrollY / scrollable) : "0");
       const atBottom =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
       setActive(atBottom ? lastId : observedId);

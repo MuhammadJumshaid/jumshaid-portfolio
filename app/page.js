@@ -1,4 +1,5 @@
 import Hero from "@/components/sections/Hero";
+import SkillMarquee from "@/components/sections/SkillMarquee";
 import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
@@ -43,6 +44,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <Hero />
+      <SkillMarquee />
       <About />
       <Skills />
       <Experience />

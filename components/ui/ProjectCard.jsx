@@ -14,7 +14,7 @@ export default function ProjectCard({ project, wide = false, reverse = false, fe
 
   return (
     <article
-      className={`card card-interactive group h-full overflow-hidden hover:-translate-y-1.5 hover:border-accent/40 motion-reduce:hover:translate-y-0 ${
+      className={`card card-interactive spotlight group h-full overflow-hidden hover:-translate-y-1.5 hover:border-accent/40 motion-reduce:hover:translate-y-0 ${
         wide ? "flex flex-col lg:grid lg:grid-cols-12" : "flex flex-col"
       }`}
     >

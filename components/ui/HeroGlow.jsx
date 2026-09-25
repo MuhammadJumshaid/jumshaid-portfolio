@@ -41,6 +41,10 @@ export default function HeroGlow() {
   }, []);
 
   return (
-    <div ref={ref} aria-hidden="true" className="hero-glow enter-fade pointer-events-none absolute inset-0 -z-10 overflow-hidden" />
+    <div ref={ref} aria-hidden="true" className="hero-glow enter-fade pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      {/* Slowly drifting light, see .aurora in globals.css */}
+      <span className="aurora aurora--a" />
+      <span className="aurora aurora--b" />
+    </div>
   );
 }

@@ -33,8 +33,8 @@ export default function About() {
 
           <h3 className="mt-12 text-label font-medium uppercase text-subtle">What I focus on</h3>
           <ul className="mt-5 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
-            {focusAreas.map(({ title, text, Icon }) => (
-              <li key={title} className="flex gap-4 bg-surface p-5">
+            {focusAreas.map(({ title, text, Icon }, index) => (
+              <li key={title} className="reveal-item flex gap-4 bg-surface p-5" style={{ "--i": index }}>
                 <span className="grid size-10 shrink-0 place-items-center rounded-md border border-border-strong text-accent">
                   <Icon className="size-5" />
                 </span>

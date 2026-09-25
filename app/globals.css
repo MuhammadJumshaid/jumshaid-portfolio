@@ -33,9 +33,9 @@
   --text-h1: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
   --text-h1--line-height: 1.05;
   --text-h1--letter-spacing: -0.03em;
-  --text-h2: clamp(1.875rem, 1.45rem + 1.9vw, 2.75rem);
-  --text-h2--line-height: 1.1;
-  --text-h2--letter-spacing: -0.025em;
+  --text-h2: clamp(2rem, 1.35rem + 2.6vw, 3.25rem);
+  --text-h2--line-height: 1.05;
+  --text-h2--letter-spacing: -0.03em;
   --text-h3: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem);
   --text-h3--line-height: 1.3;
   --text-h3--letter-spacing: -0.01em;
@@ -61,7 +61,12 @@
 
   /* Shadows: soft, no glow */
   --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 1px 2px rgb(0 0 0 / 0.4);
-  --shadow-lift: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  --shadow-lift: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 16px 40px -16px rgb(0 0 0 / 0.7);
+  /* Soft accent shadow for primary buttons and hovered cards. Not a neon glow. */
+  --shadow-accent: 0 10px 28px -14px rgb(240 180 76 / 0.55);
+
+  /* Motion: one easing curve and a small set of durations, used everywhere. */
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -139,22 +144,20 @@
       4rem 4rem;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 100%);
   }
+
+  /* Barely visible grain for depth. A tiny inline SVG tile: no extra request. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 }
 
 @layer components {
-  /* Inline text link inside body copy. */
-  .link {
-    color: var(--color-fg);
-    text-decoration: underline;
-    text-decoration-color: var(--color-border-strong);
-    text-underline-offset: 0.2em;
-    transition: text-decoration-color 150ms ease, color 150ms ease;
-  }
-  .link:hover {
-    color: var(--color-accent);
-    text-decoration-color: currentColor;
-  }
-
   /* Base card. Reused by skills, projects, experience and contact. */
   .card {
     background-color: var(--color-surface);
@@ -164,19 +167,20 @@
   }
   .card-interactive {
     transition:
-      border-color 200ms ease,
-      box-shadow 200ms ease,
-      transform 200ms ease;
+      border-color 250ms var(--ease-premium),
+      box-shadow 250ms var(--ease-premium),
+      transform 250ms var(--ease-premium);
   }
-  .card-interactive:hover {
-    border-color: var(--color-border-strong);
-    box-shadow: var(--shadow-lift);
-    transform: translateY(-2px);
+  @media (hover: hover) {
+    .card-interactive:hover {
+      border-color: rgb(240 180 76 / 0.35);
+      box-shadow: var(--shadow-lift);
+      transform: translateY(-3px);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .card-interactive,
-    .link {
+    .card-interactive {
       transition: none;
     }
     .card-interactive:hover {
@@ -206,30 +210,119 @@
   }
 }
 .enter-up {
-  animation: enter-up 600ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--enter-delay, 0ms) both;
+  animation: enter-up 600ms var(--ease-premium) var(--enter-delay, 0ms) both;
 }
 .enter-rise {
-  animation: enter-rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--enter-delay, 0ms) both;
+  animation: enter-rise 700ms var(--ease-premium) var(--enter-delay, 0ms) both;
+}
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+}
+/* Decorative layers only (never content), so it cannot hurt LCP. */
+.enter-fade {
+  animation: enter-fade 900ms ease-out var(--enter-delay, 0ms) both;
+}
+
+/* Hero background (components/ui/HeroGlow.jsx): a static soft glow, plus a
+   fainter one that follows the pointer on mouse/trackpad devices. */
+.hero-glow {
+  background: radial-gradient(44rem 30rem at 72% 35%, rgb(240 180 76 / 0.06), transparent 65%);
+}
+.hero-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 500ms var(--ease-premium);
+  background: radial-gradient(26rem circle at var(--glow-x, 50%) var(--glow-y, 50%), rgb(240 180 76 / 0.07), transparent 60%);
+}
+.hero-glow[data-active="true"]::after {
+  opacity: 1;
+}
+
+/* Cursor dot (components/ui/CursorDot.jsx). Mouse/trackpad only; the
+   component never enables it on touch devices or under reduced motion. */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+.cursor-dot[data-visible="true"] {
+  opacity: 1;
+}
+.cursor-dot[data-state="text"] {
+  opacity: 0;
+}
+.cursor-dot__dot,
+.cursor-dot__ring {
+  position: absolute;
+  border-radius: 9999px;
+  transition:
+    transform 300ms var(--ease-premium),
+    opacity 300ms var(--ease-premium);
+}
+.cursor-dot__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: -0.25rem 0 0 -0.25rem;
+  background: var(--color-accent);
+}
+.cursor-dot__ring {
+  width: 2rem;
+  height: 2rem;
+  margin: -1rem 0 0 -1rem;
+  border: 1px solid rgb(240 180 76 / 0.5);
+  background: rgb(240 180 76 / 0.06);
+  opacity: 0;
+  transform: scale(0.4);
+}
+.cursor-dot[data-state="link"] .cursor-dot__ring {
+  opacity: 1;
+  transform: scale(1);
+}
+.cursor-dot[data-state="link"] .cursor-dot__dot {
+  transform: scale(0.5);
 }
 
 /* Scroll reveal, driven by components/ui/Reveal.jsx. Content is visible by
    default; the component only hides elements that start below the fold. */
 .reveal[data-reveal="hidden"] {
   opacity: 0;
-  transform: translateY(1.25rem);
+  transform: translateY(1.5rem);
 }
 .reveal[data-reveal="shown"] {
   transition:
-    opacity 600ms ease-out,
-    transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    opacity 700ms var(--ease-premium),
+    transform 700ms var(--ease-premium);
+}
+
+/* Staggered children: put .reveal-item on each item and style={{ "--i": index }}.
+   Keep it on a wrapper, not on an element with its own hover transition. */
+.reveal[data-reveal="hidden"] .reveal-item {
+  opacity: 0;
+  transform: translateY(0.75rem);
+}
+.reveal[data-reveal="shown"] .reveal-item {
+  transition:
+    opacity 600ms var(--ease-premium),
+    transform 600ms var(--ease-premium);
+  transition-delay: calc(120ms + var(--i, 0) * 60ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .enter-up,
-  .enter-rise {
+  .enter-rise,
+  .enter-fade {
     animation: none;
   }
-  .reveal[data-reveal] {
+  .reveal[data-reveal],
+  .reveal[data-reveal] .reveal-item {
     opacity: 1;
     transform: none;
     transition: none;

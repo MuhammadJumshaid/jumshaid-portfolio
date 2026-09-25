@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <Container className="flex min-h-[calc(100svh-var(--spacing-nav)-12rem)] flex-col justify-center py-section">
+    <Container className="enter-up flex min-h-[calc(100svh-var(--spacing-nav)-12rem)] flex-col justify-center py-section">
       <p className="flex items-center gap-3 text-label font-medium uppercase text-accent">
         <span aria-hidden="true" className="h-px w-8 bg-accent" />
         Error 404

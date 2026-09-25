@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { publicFileExists } from "@/lib/publicFile";
+import { ExternalLinkIcon } from "@/components/ui/Icons";
 
 function hostname(url) {
   try {
@@ -11,7 +12,11 @@ function hostname(url) {
 
 // 16:10 project screenshot inside a light browser frame. Without a
 // screenshot it shows the project title on a designed panel instead.
+// With a live URL the preview is clickable (mouse/touch only: it is hidden
+// from assistive tech and skipped by Tab, because the Live Demo button is the
+// accessible link), and a soft overlay appears on hover.
 export default function ProjectPreview({ project, sizes, className = "" }) {
+  const href = project.liveUrl;
   const host = hostname(project.liveUrl);
   const hasImage = publicFileExists(project.image);
 
@@ -32,6 +37,16 @@ export default function ProjectPreview({ project, sizes, className = "" }) {
       </div>
 
       <div className="relative aspect-[16/10] overflow-hidden">
+        {href && (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            tabIndex={-1}
+            aria-hidden="true"
+            className="absolute inset-0 z-10"
+          />
+        )}
         {hasImage ? (
           <Image
             src={project.image}
@@ -50,6 +65,22 @@ export default function ProjectPreview({ project, sizes, className = "" }) {
               {project.title}
             </span>
           </div>
+        )}
+
+        {href && (
+          <>
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-linear-to-t from-bg/80 via-bg/10 to-transparent opacity-0 transition-opacity duration-300 ease-premium group-hover:opacity-100"
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-4 left-4 inline-flex translate-y-1 items-center gap-1.5 rounded-full border border-border-strong bg-bg/75 px-3 py-1.5 text-small text-fg opacity-0 backdrop-blur-sm transition duration-300 ease-premium group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-opacity"
+            >
+              Visit site
+              <ExternalLinkIcon className="size-3.5" />
+            </span>
+          </>
         )}
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { Bricolage_Grotesque, Geist } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CursorDot from "@/components/ui/CursorDot";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -68,6 +69,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <Footer />
+        <CursorDot />
       </body>
     </html>
   );

@@ -7,6 +7,8 @@ export const site = {
   experienceYears: 2, // displayed as "2+ years"
   heroIntro:
     "I build fast, responsive web apps with React and Next.js, with clean code and careful attention to detail.",
+  // Main stack shown in the hero. Must match names in data/skills.js.
+  heroStack: ["JavaScript", "React.js", "Next.js", "Tailwind CSS"],
   bio: "Muhammad Jumshaid is a Software Developer and Frontend Developer who builds modern, responsive and user-friendly web applications with JavaScript, React and Next.js.",
 
   email: "jumshaid.khan.1222@gmail.com",

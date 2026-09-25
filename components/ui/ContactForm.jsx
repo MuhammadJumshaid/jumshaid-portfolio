@@ -23,13 +23,13 @@ function validate({ name, email, message }) {
 }
 
 const inputClass =
-  "w-full rounded-md border bg-bg px-4 text-fg placeholder:text-subtle transition-colors focus:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40";
+  "w-full rounded-md border bg-bg/80 px-4 text-fg placeholder:text-subtle transition-[border-color,box-shadow,background-color] duration-300 ease-premium hover:border-muted/60 focus:border-accent focus:bg-bg focus:shadow-[0_0_0_4px_rgb(240_180_76/0.14)] focus-visible:outline-none";
 
 export default function ContactForm() {
   const [values, setValues] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [status, setStatus] = useState(""); // message shown after submit
+  const [status, setStatus] = useState(null); // { text, gmailUrl } shown after submit
   const formRef = useRef(null);
 
   const onChange = (event) => {
@@ -47,7 +47,7 @@ export default function ContactForm() {
 
     const firstInvalid = fields.find((field) => found[field.name]);
     if (firstInvalid) {
-      setStatus("");
+      setStatus(null);
       formRef.current.elements[firstInvalid.name].focus();
       return;
     }
@@ -59,8 +59,11 @@ export default function ContactForm() {
     });
     setStatus(
       result.ok
-        ? `Your email app should now open with your message ready to send. If nothing happened, email me directly at ${site.email}.`
-        : `Something went wrong. Please email me directly at ${site.email}.`,
+        ? {
+            text: `Your email app should now open with your message ready to send. If nothing happened, email me directly at ${site.email}`,
+            gmailUrl: result.gmailUrl,
+          }
+        : { text: `Something went wrong. Please email me directly at ${site.email}` },
     );
   };
 
@@ -107,7 +110,28 @@ export default function ContactForm() {
       </div>
 
       <p role="status" className="text-small text-muted empty:hidden">
-        {status}
+        {status && (
+          <>
+            {status.text}
+            {status.gmailUrl ? (
+              <>
+                {" or "}
+                <a
+                  href={status.gmailUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-accent underline underline-offset-4 hover:text-accent-hover"
+                >
+                  open it in Gmail instead
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+                .
+              </>
+            ) : (
+              "."
+            )}
+          </>
+        )}
       </p>
     </form>
   );

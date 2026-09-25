@@ -38,7 +38,7 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   data-nav-link
-                  className="relative inline-flex min-h-11 items-center px-3 text-small text-muted transition-colors hover:text-fg after:absolute after:inset-x-3 after:bottom-2 after:h-px after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 aria-[current=location]:text-fg aria-[current=location]:after:scale-x-100 motion-reduce:after:transition-none"
+                  className="relative inline-flex min-h-11 items-center px-3 text-small text-muted transition-colors hover:text-fg after:absolute after:inset-x-3 after:bottom-2 after:h-px after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 after:ease-premium hover:after:scale-x-100 aria-[current=location]:text-fg aria-[current=location]:after:scale-x-100 motion-reduce:after:transition-none"
                 >
                   {link.label}
                 </a>

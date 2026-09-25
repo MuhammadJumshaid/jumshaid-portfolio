@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. This is the only place colours, fonts, type sizes,
+ * spacing, radii and shadows are defined. Use them through Tailwind
+ * utilities (bg-surface, text-muted, text-h2, py-section, rounded-md...).
+ *
+ * Theme: dark. All text colours pass WCAG AA on bg, surface and raised.
+ */
+@theme {
+  /* Colours */
+  --color-bg: #0b0d10;
+  --color-surface: #12161b;
+  --color-raised: #181d23;
+  --color-border: #262c35;
+  --color-border-strong: #3a424d;
+  --color-fg: #e9ebee; /* 16.3:1 on bg */
+  --color-muted: #9ba4b0; /* 7.7:1 on bg */
+  --color-subtle: #7d8693; /* 5.3:1 on bg, small labels only */
+  --color-accent: #f0b44c; /* 10.5:1 on bg */
+  --color-accent-hover: #f6c56f;
+  --color-on-accent: #14100a; /* 10.2:1 on accent */
+  --color-danger: #f87171; /* form errors, 6.6:1 on surface */
+
+  /* Fonts (variables come from next/font in app/layout.js) */
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-geist), ui-sans-serif, sans-serif;
+
+  /* Type scale */
+  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 6rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: clamp(1.875rem, 1.45rem + 1.9vw, 2.75rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.025em;
+  --text-h3: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem);
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.7;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.14em;
+
+  /* Spacing (on top of Tailwind's default 0.25rem scale) */
+  --spacing-nav: 4.5rem; /* navbar height, also used for scroll-margin */
+  --spacing-section: clamp(4rem, 1.9rem + 8.5vw, 9rem); /* ~64px on phones, ~150px on desktop */
+
+  /* Readable line length for paragraphs (~60-75 characters). Use max-w-measure. */
+  --container-measure: 34rem;
+
+  /* Radius: kept modest */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Shadows: soft, no glow */
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-lift: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 12px 32px -12px rgb(0 0 0 / 0.6);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-bg);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* No body background: it would cover the body::before layer. html paints it. */
+  body {
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    text-rendering: optimizeLegibility;
+    /* Long words or URLs wrap instead of causing horizontal scroll */
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  /* When keyboard focus scrolls an element into view, keep it clear of the
+     sticky navbar (WCAG 2.2 "Focus Not Obscured"). Sections use scroll-mt-nav. */
+  :where(a, button, input, textarea, select) {
+    scroll-margin-block: calc(var(--spacing-nav) + 0.5rem) 0.5rem;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Background system: a faint grid that fades out, plus a soft warm glow at the top. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(60rem 30rem at 50% -10%, rgb(240 180 76 / 0.07), transparent 70%),
+      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size:
+      100% 100%,
+      4rem 4rem,
+      4rem 4rem;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 100%);
+  }
+}
+
+@layer components {
+  /* Inline text link inside body copy. */
+  .link {
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 150ms ease, color 150ms ease;
+  }
+  .link:hover {
+    color: var(--color-accent);
+    text-decoration-color: currentColor;
+  }
+
+  /* Base card. Reused by skills, projects, experience and contact. */
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+  .card-interactive {
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      transform 200ms ease;
+  }
+  .card-interactive:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-interactive,
+    .link {
+      transition: none;
+    }
+    .card-interactive:hover {
+      transform: none;
+    }
+  }
+}
+
+/*
+ * Motion. Only opacity and transform are animated, and everything is
+ * switched off under prefers-reduced-motion.
+ */
+
+/* Hero entrance: pure CSS, so it never depends on JavaScript. Stagger with
+   style={{ "--enter-delay": "120ms" }}. */
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+/* Transform only (no fade): used on the H1 so it stays visible and can be
+   the Largest Contentful Paint element from the first frame. */
+@keyframes enter-rise {
+  from {
+    transform: translateY(0.75rem);
+  }
+}
+.enter-up {
+  animation: enter-up 600ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--enter-delay, 0ms) both;
+}
+.enter-rise {
+  animation: enter-rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--enter-delay, 0ms) both;
+}
+
+/* Scroll reveal, driven by components/ui/Reveal.jsx. Content is visible by
+   default; the component only hides elements that start below the fold. */
+.reveal[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(1.25rem);
+}
+.reveal[data-reveal="shown"] {
+  transition:
+    opacity 600ms ease-out,
+    transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter-up,
+  .enter-rise {
+    animation: none;
+  }
+  .reveal[data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -3,6 +3,7 @@ import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import MobileMenu from "@/components/layout/MobileMenu";
 import NavScrollSpy from "@/components/layout/NavScrollSpy";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import { navLinks } from "@/data/navigation";
 import { site } from "@/data/site";
 
@@ -45,10 +46,15 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
+          <ThemeToggle className="-mx-2" />
           <Button href="/#contact">Get In Touch</Button>
         </div>
 
-        <MobileMenu links={navLinks} />
+        {/* Phones and tablets: theme switch sits next to the menu button */}
+        <div className="flex items-center gap-1 lg:hidden">
+          <ThemeToggle />
+          <MobileMenu links={navLinks} />
+        </div>
       </Container>
 
       {/* Reading progress: scaled by --progress, set in NavScrollSpy */}

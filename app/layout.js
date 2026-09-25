@@ -50,14 +50,22 @@ export const metadata = {
   robots: { index: true, follow: true },
 };
 
+// Dark is the default; a saved choice from ThemeToggle wins.
+const themeScript = `try{if(localStorage.getItem("theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}`;
+
 export const viewport = {
   themeColor: "#0b0d10",
-  colorScheme: "dark",
+  colorScheme: "dark light",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geist.variable} ${bricolage.variable} antialiased`}>
+    // suppressHydrationWarning: the theme script below sets data-theme before React loads.
+    <html lang="en" suppressHydrationWarning className={`${geist.variable} ${bricolage.variable} antialiased`}>
+      <head>
+        {/* Applies the saved theme before first paint, so there is no flash. */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"

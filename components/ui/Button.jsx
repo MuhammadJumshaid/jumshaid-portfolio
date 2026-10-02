@@ -1,6 +1,6 @@
 // group/button lets icons inside react to hover (e.g. an arrow nudging right).
 const base =
-  "group/button inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 text-small font-medium whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform] duration-300 ease-premium hover:-translate-y-0.5 active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 disabled:pointer-events-none disabled:opacity-50";
+  "group/button inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 text-small font-medium whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform,translate,scale] duration-300 ease-premium hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100 disabled:pointer-events-none disabled:opacity-50";
 
 const variants = {
   primary: "bg-accent text-on-accent hover:bg-accent-hover hover:shadow-accent",

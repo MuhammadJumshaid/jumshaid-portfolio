@@ -1,6 +1,7 @@
 import Section from "@/components/ui/Section";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Badge from "@/components/ui/Badge";
+import Reveal from "@/components/ui/Reveal";
 import { experience } from "@/data/experience";
 
 // Renders nothing until data/experience.js has entries. The nav link is
@@ -16,7 +17,9 @@ export default function Experience() {
         {experience.map((job, index) => {
           const meta = [job.period, job.location].filter(Boolean);
           return (
-            <li
+            <Reveal
+              as="li"
+              variant="left"
               key={`${job.company}-${job.role}-${index}`}
               className="relative grid gap-3 border-l border-border pb-12 pl-8 last:pb-0 md:grid-cols-12 md:gap-8 md:border-l-0 md:pl-0"
             >
@@ -66,7 +69,7 @@ export default function Experience() {
                   </ul>
                 )}
               </div>
-            </li>
+            </Reveal>
           );
         })}
       </ol>

@@ -1,3 +1,5 @@
+import Reveal from "@/components/ui/Reveal";
+
 // Small label + H2 + optional intro. Pass `id` so the section can
 // reference the heading with aria-labelledby.
 // When the section scrolls in, the title's words slide up from behind a
@@ -6,9 +8,9 @@ export default function SectionHeading({ id, label, title, intro, className = ""
   const words = title.split(" ");
 
   return (
-    <div className={`mb-12 max-w-2xl md:mb-16 ${className}`}>
+    <Reveal variant="none" className={`mb-12 max-w-2xl md:mb-16 ${className}`}>
       {label && (
-        <p className="mb-4 flex items-center gap-3 text-label font-medium uppercase text-accent">
+        <p className="reveal-item mb-4 flex items-center gap-3 text-label font-medium uppercase text-accent">
           <span aria-hidden="true" className="heading-line h-px w-8 origin-left bg-accent" />
           {label}
         </p>
@@ -23,7 +25,11 @@ export default function SectionHeading({ id, label, title, intro, className = ""
           </span>
         ))}
       </h2>
-      {intro && <p className="mt-5 max-w-measure text-muted">{intro}</p>}
-    </div>
+      {intro && (
+        <p className="reveal-item mt-5 max-w-measure text-muted" style={{ "--i": words.length + 1 }}>
+          {intro}
+        </p>
+      )}
+    </Reveal>
   );
 }

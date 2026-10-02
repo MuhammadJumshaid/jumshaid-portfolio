@@ -19,7 +19,8 @@ export default function Hero() {
       <HeroGlow />
 
       <Container className="grid items-center gap-12 pt-10 pb-20 sm:pt-16 md:gap-16 lg:min-h-[calc(100svh-var(--spacing-nav))] lg:grid-cols-12 lg:py-16">
-        <div className="lg:col-span-7">
+        {/* hero-parallax-*: gentle depth as you scroll away (desktop, CSS only) */}
+        <div className="hero-parallax-text lg:col-span-7">
           <p
             style={delay(100)}
             className="enter-up inline-flex items-center gap-2.5 rounded-full border border-border-strong/70 bg-surface/50 py-1.5 pr-4 pl-3 text-small text-fg backdrop-blur-sm"
@@ -75,13 +76,15 @@ export default function Hero() {
           <SocialLinks className="enter-up mt-8 -ml-3" style={delay(1950)} />
         </div>
 
-        <div className="lg:col-span-5">
-          {/* Width leaves room for the 0.75rem offset outline on small phones */}
-          <div className="relative mx-auto w-full max-w-[min(20rem,calc(100%-0.75rem))] sm:max-w-sm lg:mr-0 lg:max-w-md 2xl:max-w-lg">
+        <div className="hero-parallax-photo lg:col-span-5">
+          {/* Width leaves room for the 0.75rem offset outline on small phones.
+              enter-photo: rises and settles from a slight zoom (transform only,
+              so the photo is still painted immediately for LCP). */}
+          <div className="enter-photo relative mx-auto w-full max-w-[min(20rem,calc(100%-0.75rem))] sm:max-w-sm lg:mr-0 lg:max-w-md 2xl:max-w-lg">
             {/* Offset outline behind the photo */}
             <div
               aria-hidden="true"
-              style={delay(300)}
+              style={delay(450)}
               className="enter-fade absolute inset-0 translate-x-3 translate-y-3 rounded-lg border border-border-strong/70"
             />
             <ProfileImage

@@ -1,9 +1,9 @@
 import Container from "@/components/ui/Container";
-import Reveal from "@/components/ui/Reveal";
 
 // Page section with consistent vertical rhythm. scroll-mt keeps the
 // heading clear of the sticky navbar when jumping to #id. The hairline span
-// separates sections and fades out at both ends.
+// separates sections and fades out at both ends. Animation is done per group
+// inside each section (Reveal), so content appears as you reach it.
 export default function Section({ id, labelledBy, className = "", children }) {
   return (
     <section
@@ -15,9 +15,7 @@ export default function Section({ id, labelledBy, className = "", children }) {
         aria-hidden="true"
         className="absolute inset-x-0 top-0 mx-auto h-px max-w-5xl bg-linear-to-r from-transparent via-border-strong to-transparent"
       />
-      <Container>
-        <Reveal>{children}</Reveal>
-      </Container>
+      <Container>{children}</Container>
     </section>
   );
 }

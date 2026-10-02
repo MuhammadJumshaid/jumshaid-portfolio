@@ -8,14 +8,17 @@ export default function ProfileImage({ src, alt, sizes, preload = false, classNa
   return (
     <div className={`relative overflow-hidden rounded-lg border border-border bg-surface ${className}`}>
       {publicFileExists(src) ? (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes={sizes}
-          preload={preload}
-          className="object-cover object-[center_20%]"
-        />
+        // .reveal-zoom: settles from a gentle zoom when inside a Reveal "image"
+        <div className="reveal-zoom absolute inset-0">
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            sizes={sizes}
+            preload={preload}
+            className="object-cover object-[center_20%]"
+          />
+        </div>
       ) : (
         <div
           aria-hidden="true"

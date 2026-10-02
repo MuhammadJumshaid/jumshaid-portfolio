@@ -2,6 +2,7 @@ import Section from "@/components/ui/Section";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ContactForm from "@/components/ui/ContactForm";
 import CopyEmailButton from "@/components/ui/CopyEmailButton";
+import Reveal from "@/components/ui/Reveal";
 import { GitHubIcon, LinkedInIcon, MailIcon, PhoneIcon } from "@/components/ui/Icons";
 import { site } from "@/data/site";
 
@@ -41,7 +42,7 @@ export default function Contact() {
             className="mb-10!"
           />
 
-          <ul className="space-y-3">
+          <Reveal as="ul" variant="none" className="space-y-3">
             {channels
               .filter((channel) => channel.href)
               .map(({ label, value, href, Icon, external, copy }, index) => (
@@ -68,10 +69,11 @@ export default function Contact() {
                   </div>
                 </li>
               ))}
-          </ul>
+          </Reveal>
         </div>
 
-        <div className="reveal-item lg:col-span-7" style={{ "--i": 2 }}>
+        {/* Form slides in from the right on larger screens */}
+        <Reveal variant="right" delay={120} className="lg:col-span-7">
           <div className="card spotlight overflow-hidden p-6 sm:p-8">
             {/* Thin accent line along the top edge marks the final call to action */}
             <span
@@ -82,7 +84,7 @@ export default function Contact() {
             <p className="mt-2 mb-6 text-small text-muted">All fields are required.</p>
             <ContactForm />
           </div>
-        </div>
+        </Reveal>
       </div>
     </Section>
   );

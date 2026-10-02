@@ -291,28 +291,84 @@
 }
 
 /* Scroll reveal, driven by components/ui/Reveal.jsx. Content is visible by
-   default; the component only hides elements that start below the fold. */
-.reveal[data-reveal="hidden"] {
+   default; the component only hides elements that start below the fold.
+   Motion should feel like content rising from inside the screen: a short
+   travel, a hint of scale, and a long soft ease-out. */
+.reveal {
+  --reveal-y: 2rem;
+  --reveal-x: 2.5rem;
+}
+@media (max-width: 639px) {
+  /* Shorter travel on phones; side slides become vertical (no sideways overflow). */
+  .reveal {
+    --reveal-y: 1.5rem;
+    --reveal-x: 0rem;
+  }
+}
+.reveal[data-reveal="hidden"]:not(.reveal--none) {
   opacity: 0;
-  transform: translateY(1.5rem);
+}
+.reveal--up[data-reveal="hidden"] {
+  transform: translate3d(0, var(--reveal-y), 0) scale(0.98);
+}
+.reveal--left[data-reveal="hidden"] {
+  transform: translate3d(calc(var(--reveal-x) * -1), calc(var(--reveal-y) * 0.5), 0);
+}
+.reveal--right[data-reveal="hidden"] {
+  transform: translate3d(var(--reveal-x), calc(var(--reveal-y) * 0.5), 0);
+}
+@media (max-width: 639px) {
+  .reveal--left[data-reveal="hidden"],
+  .reveal--right[data-reveal="hidden"] {
+    transform: translate3d(0, var(--reveal-y), 0);
+  }
+}
+.reveal--scale[data-reveal="hidden"] {
+  transform: translate3d(0, calc(var(--reveal-y) * 0.6), 0) scale(0.94);
+}
+.reveal--image[data-reveal="hidden"] {
+  transform: translate3d(0, var(--reveal-y), 0);
 }
 .reveal[data-reveal="shown"] {
   transition:
-    opacity 700ms var(--ease-premium),
-    transform 700ms var(--ease-premium);
+    opacity 800ms var(--ease-premium),
+    transform 1000ms var(--ease-premium);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* Picture inside a reveal settles from a gentle zoom. Put .reveal-zoom on a
+   wrapper around the image (not the image itself, which has its own hover). */
+.reveal[data-reveal="hidden"] .reveal-zoom {
+  transform: scale(1.12);
+}
+.reveal[data-reveal="shown"] .reveal-zoom {
+  transition: transform 1400ms var(--ease-premium);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* Decorative frame behind a photo slides into its offset position. */
+.reveal[data-reveal="hidden"] .reveal-frame {
+  opacity: 0;
+  translate: 0 0;
+}
+.reveal[data-reveal="shown"] .reveal-frame {
+  transition:
+    opacity 900ms var(--ease-premium),
+    translate 1100ms var(--ease-premium);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 250ms);
 }
 
 /* Staggered children: put .reveal-item on each item and style={{ "--i": index }}.
    Keep it on a wrapper, not on an element with its own hover transition. */
 .reveal[data-reveal="hidden"] .reveal-item {
   opacity: 0;
-  transform: translateY(0.75rem);
+  transform: translate3d(0, 1rem, 0);
 }
 .reveal[data-reveal="shown"] .reveal-item {
   transition:
-    opacity 600ms var(--ease-premium),
-    transform 600ms var(--ease-premium);
-  transition-delay: calc(120ms + var(--i, 0) * 60ms);
+    opacity 700ms var(--ease-premium),
+    transform 850ms var(--ease-premium);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 80ms + var(--i, 0) * 70ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -322,7 +378,9 @@
     animation: none;
   }
   .reveal[data-reveal],
-  .reveal[data-reveal] .reveal-item {
+  .reveal[data-reveal] .reveal-item,
+  .reveal[data-reveal] .reveal-zoom,
+  .reveal[data-reveal] .reveal-frame {
     opacity: 1;
     transform: none;
     transition: none;
@@ -624,6 +682,65 @@ html:not([data-theme="light"]) .theme-icon__sun {
     transition: none;
   }
   ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+ * Hero layering: the photo rises and its picture settles from a zoom,
+ * then (desktop, supporting browsers) the hero gains gentle depth as you
+ * scroll away: text drifts up and fades a little, the photo lags behind.
+ * Transform/opacity only; off under reduced motion.
+ * ------------------------------------------------------------------ */
+@keyframes enter-photo {
+  from {
+    transform: translate3d(0, 1.75rem, 0) scale(0.96);
+  }
+}
+@keyframes enter-zoom {
+  from {
+    transform: scale(1.12);
+  }
+}
+.enter-photo {
+  animation: enter-photo 1200ms var(--ease-premium) 150ms both;
+}
+.enter-photo .reveal-zoom {
+  animation: enter-zoom 1600ms var(--ease-premium) 150ms both;
+}
+
+@keyframes hero-depth-text {
+  to {
+    transform: translate3d(0, -2.5rem, 0);
+    opacity: 0.5;
+  }
+}
+@keyframes hero-depth-photo {
+  to {
+    transform: translate3d(0, 2.5rem, 0) scale(0.97);
+  }
+}
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .hero-parallax-text,
+    .hero-parallax-photo {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+    .hero-parallax-text {
+      animation-name: hero-depth-text;
+    }
+    .hero-parallax-photo {
+      animation-name: hero-depth-photo;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter-photo,
+  .enter-photo .reveal-zoom {
     animation: none;
   }
 }

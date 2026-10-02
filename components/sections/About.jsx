@@ -1,6 +1,7 @@
 import Section from "@/components/ui/Section";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ProfileImage from "@/components/ui/ProfileImage";
+import Reveal from "@/components/ui/Reveal";
 import { BoltIcon, CodeIcon, DevicesIcon, LayersIcon } from "@/components/ui/Icons";
 import { site } from "@/data/site";
 
@@ -25,16 +26,19 @@ export default function About() {
         <div className="lg:col-span-7 lg:col-start-6 lg:row-start-1">
           <SectionHeading id="about-title" label="About" title="Frontend work, done with care" className="mb-8!" />
 
-          <div className="max-w-measure space-y-5 text-muted">
-            {paragraphs.map((text) => (
-              <p key={text}>{text}</p>
+          <Reveal variant="none" className="max-w-measure space-y-5 text-muted">
+            {paragraphs.map((text, index) => (
+              <p key={text} className="reveal-item" style={{ "--i": index }}>
+                {text}
+              </p>
             ))}
-          </div>
+          </Reveal>
 
-          <h3 className="mt-12 text-label font-medium uppercase text-subtle">What I focus on</h3>
+          <Reveal variant="none" className="mt-12">
+          <h3 className="reveal-item text-label font-medium uppercase text-subtle">What I focus on</h3>
           <ul className="mt-5 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
             {focusAreas.map(({ title, text, Icon }, index) => (
-              <li key={title} className="reveal-item flex gap-4 bg-surface p-5" style={{ "--i": index }}>
+              <li key={title} className="reveal-item flex gap-4 bg-surface p-5" style={{ "--i": index + 1 }}>
                 <span className="grid size-10 shrink-0 place-items-center rounded-md border border-border-strong text-accent">
                   <Icon className="size-5" />
                 </span>
@@ -45,15 +49,16 @@ export default function About() {
               </li>
             ))}
           </ul>
+          </Reveal>
         </div>
 
         <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1">
           {/* Width leaves room for the offset outline on small phones */}
-          <div className="relative mx-auto w-full max-w-[min(20rem,calc(100%-0.75rem))] lg:sticky lg:top-[calc(var(--spacing-nav)+2rem)] lg:mx-0 lg:max-w-none">
+          <Reveal variant="image" className="relative mx-auto w-full max-w-[min(20rem,calc(100%-0.75rem))] lg:sticky lg:top-[calc(var(--spacing-nav)+2rem)] lg:mx-0 lg:max-w-none">
             {/* Offset outline, mirroring the hero photo */}
             <div
               aria-hidden="true"
-              className="absolute inset-0 -translate-x-3 translate-y-3 rounded-lg border border-border-strong/70"
+              className="reveal-frame absolute inset-0 -translate-x-3 translate-y-3 rounded-lg border border-border-strong/70"
             />
             <ProfileImage
               src={site.aboutImage}
@@ -61,7 +66,7 @@ export default function About() {
               sizes="(min-width: 1024px) 26rem, 20rem"
               className="aspect-[4/5] w-full"
             />
-          </div>
+          </Reveal>
         </div>
       </div>
     </Section>

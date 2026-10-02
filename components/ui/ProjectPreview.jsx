@@ -48,13 +48,15 @@ export default function ProjectPreview({ project, sizes, className = "" }) {
           />
         )}
         {hasImage ? (
-          <Image
-            src={project.image}
-            alt={`Screenshot of ${project.title}`}
-            fill
-            sizes={sizes}
-            className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-          />
+          <div className="reveal-zoom absolute inset-0">
+            <Image
+              src={project.image}
+              alt={`Screenshot of ${project.title}`}
+              fill
+              sizes={sizes}
+              className="object-cover object-top transition-transform duration-700 ease-premium group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            />
+          </div>
         ) : (
           <div
             aria-hidden="true"
